@@ -67,8 +67,8 @@
             this.deleteToolStripMenuItem,
             this.deleteAllToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 28);
-            this.fileToolStripMenuItem.Text = "file";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(53, 28);
+            this.fileToolStripMenuItem.Text = "note";
             // 
             // createToolStripMenuItem
             // 

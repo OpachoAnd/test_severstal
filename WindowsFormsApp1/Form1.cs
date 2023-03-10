@@ -1,6 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace WindowsFormsApp1
 {
@@ -109,6 +117,7 @@ namespace WindowsFormsApp1
 
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Удаление заметки
             string path_note = toolStripComboBox1.Text;
 
             richTextBox1.Text = "";

@@ -25,6 +25,7 @@ namespace WindowsFormsApp1
         private void Form1_Load(object sender, EventArgs e)
         {
             toolStripComboBox1.Items.AddRange(Directory.GetFiles(this.path));
+
         }
 
         private void createToolStripMenuItem_Click(object sender, EventArgs e)
@@ -104,6 +105,11 @@ namespace WindowsFormsApp1
                     fileInf.Delete();
                 }
             }
+        }
+
+        private void deleteAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

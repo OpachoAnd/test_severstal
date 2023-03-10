@@ -16,6 +16,28 @@ namespace WindowsFormsApp1
     {
         string path;
 
+        async private void SavingNote(string pathNote, string text)
+        {
+            // Сохранение заметки
+            using (StreamWriter writer = new StreamWriter(pathNote, false))
+            {
+                await writer.WriteLineAsync(text);
+            }
+        }
+
+        private void FirstNote(string pathNote)
+        {
+            string text = "Привет!\nЭто твоя первая заметка!\nМожешь удалить её и создать свою.\nУдачи!";
+            string path_note = path + "1.txt";
+
+            richTextBox1.Text = text;
+            
+            SavingNote(path_note, text);
+
+            toolStripComboBox1.Items.Add(path_note);
+            toolStripComboBox1.Text = path_note;
+        }
+
         public Form1()
         {
             InitializeComponent();
@@ -25,7 +47,10 @@ namespace WindowsFormsApp1
         private void Form1_Load(object sender, EventArgs e)
         {
             toolStripComboBox1.Items.AddRange(Directory.GetFiles(this.path));
-
+            if (toolStripComboBox1.Items.Count == 0)
+            {
+                FirstNote(this.path);
+            }
         }
 
         private void createToolStripMenuItem_Click(object sender, EventArgs e)
@@ -34,7 +59,7 @@ namespace WindowsFormsApp1
             this.richTextBox1.Text = "";
         }
 
-        async private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Сохранение файла
 
@@ -53,13 +78,10 @@ namespace WindowsFormsApp1
                 {
                     // Если заметки уже были
                     int note_name = toolStripComboBox1.Items.Count + 1; 
-                    path_note = path + note_name.ToString() + ".txt";
-                    
+                    path_note = path + note_name.ToString() + ".txt";                    
                 }
-                using (StreamWriter writer = new StreamWriter(path_note, false))
-                {
-                    await writer.WriteLineAsync(text);
-                }
+                
+                SavingNote(path_note, text);
 
                 toolStripComboBox1.Items.Add(path_note);
                 toolStripComboBox1.Text = path_note;
@@ -67,12 +89,8 @@ namespace WindowsFormsApp1
             else
             {
                 // Редактирование существующего файла
-                using (StreamWriter writer = new StreamWriter(path_note, false))
-                {
-                    await writer.WriteLineAsync(text);
-                }
-            }
-            
+                SavingNote(path_note, text);
+            }            
         }
 
         async private void toolStripComboBox1_TextChanged(object sender, EventArgs e)
@@ -81,10 +99,18 @@ namespace WindowsFormsApp1
             string path_note = toolStripComboBox1.Text;
             if (!string.IsNullOrEmpty(path_note))
             {
-                using (StreamReader reader = new StreamReader(path_note))
+                try
                 {
-                    string text = await reader.ReadToEndAsync();
-                    richTextBox1.Text = text;
+                    using (StreamReader reader = new StreamReader(path_note))
+                    {
+                        string text = await reader.ReadToEndAsync();
+                        richTextBox1.Text = text;
+                    }
+                }
+                catch
+                {
+                    // При попытке редактирования пути к файлу
+                    toolStripComboBox1.Text = "";
                 }
             }
         }
@@ -109,7 +135,14 @@ namespace WindowsFormsApp1
 
         private void deleteAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            richTextBox1.Text = "";
+            toolStripComboBox1.Items.Clear();
+            toolStripComboBox1.Text = "";
+            System.IO.DirectoryInfo di = new DirectoryInfo(this.path);
+            foreach (FileInfo note in di.EnumerateFiles())
+            {
+                note.Delete();
+            }
         }
     }
 }
